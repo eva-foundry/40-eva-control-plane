@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "schema": "eva.trust.v2",
+    "generated_at": "2026-02-25T06:20:16.931Z",
+    "repo": "C:\\AICOE\\eva-foundation\\40-eva-control-plane",
+    "reconciliation_path": "C:\\AICOE\\eva-foundation\\40-eva-control-plane\\.eva\\reconciliation.json"
+  },
+  "score": 0,
+  "stale": false,
+  "sparkline": "0 -> 0 -> 0 -> 0 -> 0 -> 0",
+  "sparkline_delta": "no change",
+  "components": {
+    "coverage": 0,
+    "evidenceCompleteness": 0,
+    "consistencyScore": 0
+  },
+  "actions": [
+    "block",
+    "investigate"
+  ]
+}

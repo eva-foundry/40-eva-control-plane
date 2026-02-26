@@ -1,0 +1,21 @@
+{
+  "runs": [
+    {
+      "id": "run-sample-001",
+      "evidence_id": "GH0001-PR01-abc1234",
+      "runbook_id": "rb-001",
+      "app_id": "app-eva-da-rebuild",
+      "env_id": "env-dev",
+      "status": "succeeded",
+      "initiated_by": "github-actions",
+      "started_at": "2026-02-21T15:00:00Z",
+      "completed_at": "2026-02-21T15:04:30Z",
+      "duration_seconds": 270,
+      "pr_number": 1,
+      "commit_sha": "abc1234",
+      "ado_work_item_id": null,
+      "evidence_pack_uri": "https://artifacts.example/GH0001-PR01-abc1234/evidence-pack.json",
+      "notes": "Sample run — replace with real runs."
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-02-21T00:00:00",
+  "ado_org": "https://dev.azure.com/marcopresta",
+  "ado_project": "eva-poc",
+  "github_repo": "eva-foundry/40-eva-control-plane",
+  "project_maturity": "active",
+
+  "epic": {
+    "skip_if_id_exists": 142,
+    "type": "Epic",
+    "title": "EVA Automation Control Plane",
+    "description": "Runtime layer that executes on top of the 37-data-model catalog.\n\nRecords WHAT HAPPENED: runs, step executions, evidence packs, and the evidence_id that ties a PR → deployment → telemetry snapshot together.\n\nevidence_id format: GH{run}-PR{pr}-{short_sha}\n\nTwo planes: catalog (37-data-model, port 8010) + runtime (40-eva-control-plane, port 8020).",
+    "tags": "eva-control-plane;40;evidence-spine",
+    "area_path": "eva-poc"
+  },
+
+  "features": [
+    {
+      "id_hint": "cp-runtime-api",
+      "type": "Feature",
+      "title": "Runtime API — FastAPI (port 8020)",
+      "description": "8 REST routes: GET/POST/PATCH /runs, GET/POST /artifacts, GET /evidence/{evidence_id}, GET /health. Pydantic v2 models (Run, StepRun, Artifact). Swagger at /docs.",
+      "tags": "eva-control-plane;runtime-api",
+      "parent": "epic"
+    },
+    {
+      "id_hint": "cp-evidence-spine",
+      "type": "Feature",
+      "title": "Two-Plane Evidence Spine",
+      "description": "evidence_id format GH{run_number}-PR{pr_number}-{short_sha} propagated across: PR check run title, Azure deployment tag, ADO work item artifact, Cosmos run partition key. Cross-plane evidence view via GET /evidence/{evidence_id}.",
+      "tags": "eva-control-plane;evidence-spine",
+      "parent": "epic"
+    },
+    {
+      "id_hint": "cp-github-actions",
+      "type": "Feature",
+      "title": "GitHub Actions Runbooks (RB-001, RB-002)",
+      "description": "RB-001: PR → Build/Test → Evidence Pack (ACTIVE). RB-002: Promote to DEV (stub). Compiled from runbook catalog in 37-data-model. pack-evidence.py assembles evidence-pack.json and uploads as GitHub artifact.",
+      "tags": "eva-control-plane;github-actions;runbooks",
+      "parent": "epic"
+    },
+    {
+      "id_hint": "cp-data-models",
+      "type": "Feature",
+      "title": "Control-Plane Data Models and Seeds",
+      "description": "Pydantic v2 models: Run (run_id, evidence_id, status, app_id), StepRun (step_id, runbook_id, duration_s), Artifact (sha256, uri, artifact_type). JSON seed files for model/, config.py pydantic-settings.",
+      "tags": "eva-control-plane;data-models",
+      "parent": "epic"
+    }
+  ],
+
+  "user_stories": [
+    {
+      "id_hint": "cp-wi-1",
+      "type": "Product Backlog Item",
+      "title": "FastAPI Runtime API — 8 routes, Swagger at /docs",
+      "description": "Implement FastAPI server on port 8020 with routers: runs.py (CRUD), artifacts.py (CRUD), evidence.py (cross-run view). Health endpoint. Auto-generated Swagger. All routes accept/return Pydantic v2 models.",
+      "acceptance_criteria": "GET /health returns 200. POST /runs returns run_id + evidence_id. GET /evidence/{id} returns run + steps + artifacts. Swagger accessible at /docs.",
+      "story_points": 5,
+      "tags": "eva-control-plane;api",
+      "iteration_path": "eva-poc",
+      "state": "New",
+      "parent": "cp-runtime-api"
+    },
+    {
+      "id_hint": "cp-wi-2",
+      "type": "Product Backlog Item",
+      "title": "Evidence Spine — evidence_id propagation across planes",
+      "description": "Define and enforce evidence_id format GH{run}-PR{pr}-{sha}. Propagate via PR check title, Azure deploy tag, ADO comment, Cosmos partition key. Document two-plane architecture (catalog vs runtime).",
+      "acceptance_criteria": "evidence_id follows GH{run}-PR{pr}-{sha} format. GET /evidence/{id} returns all correlated records. Format documented in README.",
+      "story_points": 3,
+      "tags": "eva-control-plane;evidence-spine",
+      "iteration_path": "eva-poc",
+      "state": "New",
+      "parent": "cp-evidence-spine"
+    },
+    {
+      "id_hint": "cp-wi-3",
+      "type": "Product Backlog Item",
+      "title": "RB-001 — PR CI Evidence Workflow (GitHub Actions)",
+      "description": "Active GitHub Actions workflow: on PR open/sync → checkout → build/test → pack-evidence.py → upload evidence-pack.json as artifact → set check status. Propagates evidence_id in check title.",
+      "acceptance_criteria": "Workflow triggers on PR. evidence-pack.json uploaded as GitHub artifact. Check run title contains evidence_id. pack-evidence.py assembles run + steps + artifact refs.",
+      "story_points": 5,
+      "tags": "eva-control-plane;rb-001;github-actions",
+      "iteration_path": "eva-poc",
+      "state": "New",
+      "parent": "cp-github-actions"
+    },
+    {
+      "id_hint": "cp-wi-4",
+      "type": "Product Backlog Item",
+      "title": "RB-002 — Promote to DEV Workflow (stub)",
+      "description": "Stub GitHub Actions workflow for DEV promotion. Accepts evidence_id as input. Logs promotion intent and sets output evidence_id. Wired for AzureClient.deploy() once implemented in 41-eva-cli.",
+      "acceptance_criteria": "Workflow file exists at .github/workflows/rb-002-promote-dev.yml. Accepts evidence_id input. Outputs evidence_id. Runbook entry exists in 37-data-model catalog.",
+      "story_points": 2,
+      "tags": "eva-control-plane;rb-002;github-actions",
+      "iteration_path": "eva-poc",
+      "state": "New",
+      "parent": "cp-github-actions"
+    },
+    {
+      "id_hint": "cp-wi-5",
+      "type": "Product Backlog Item",
+      "title": "Pydantic v2 Models — Run, StepRun, Artifact",
+      "description": "Define Pydantic v2 models: Run (run_id, evidence_id, status, runbook_id, app_id, env, timestamps), StepRun (step_id, run_id, step_name, status, duration_s), Artifact (artifact_id, run_id, sha256, uri, artifact_type). JSON seed files.",
+      "acceptance_criteria": "All models validate with Pydantic v2. JSON seeds loadable without errors. model/runs.json, step_runs.json, artifacts.json present.",
+      "story_points": 3,
+      "tags": "eva-control-plane;models",
+      "iteration_path": "eva-poc",
+      "state": "New",
+      "parent": "cp-data-models"
+    },
+    {
+      "id_hint": "cp-wi-6",
+      "type": "Product Backlog Item",
+      "title": "pack-evidence.py — Evidence Pack Assembler",
+      "description": "Script called from GitHub Actions (RB-001) to assemble evidence-pack.json: collects run metadata, step results, artifact URIs + SHA-256 hashes, summary (passed/failed/coverage). Uploads as GitHub artifact named evidence-pack.",
+      "acceptance_criteria": "evidence-pack.json schema: evidence_id, schema_version, generated_at, runbook_id, app_id, pr_number, commit_sha, summary, artifacts[]. SHA-256 computed for each artifact.",
+      "story_points": 3,
+      "tags": "eva-control-plane;evidence-pack",
+      "iteration_path": "eva-poc",
+      "state": "New",
+      "parent": "cp-github-actions"
+    }
+  ],
+
+  "sprints_needed": []
+}

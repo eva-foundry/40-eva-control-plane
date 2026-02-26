@@ -1,0 +1,178 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# RB-001 — PR CI + Evidence Pack
+# Source runbook: 37-data-model/model/runbooks.json  →  rb-001
+#
+# Triggered on: PR opened / synchronize → main, release/*
+# Steps:
+#   s-10  Run test suite + collect coverage
+#   s-20  Assemble and upload signed evidence pack
+#   s-30  Post evidence summary as GitHub check run (required status check)
+#
+# Evidence ID format: GH<run_number>-PR<pr_number>-<short_sha>
+# Evidence pack uploaded as Actions artifact (retention: 90 days)
+# Required check: "evidence-pack" must pass before merge
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: "RB-001 — PR CI + Evidence Pack"
+
+on:
+  pull_request:
+    branches:
+      - main
+      - "release/**"
+    types:
+      - opened
+      - synchronize
+
+permissions:
+  contents: read
+  checks: write
+  pull-requests: write
+
+env:
+  EVIDENCE_ID: "GH${{ github.run_number }}-PR${{ github.event.number }}-${{ github.sha && github.sha || '' }}"
+
+jobs:
+  ci-evidence:
+    name: "RB-001 | Run Tests + Pack Evidence"
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      # ── Checkout ───────────────────────────────────────────────────────────
+      - name: "Checkout source"
+        uses: actions/checkout@v4
+
+      # ── Set short SHA for evidenceId ───────────────────────────────────────
+      - name: "Compute evidence_id"
+        id: evidence
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          EVIDENCE_ID="GH${{ github.run_number }}-PR${{ github.event.number }}-${SHORT_SHA}"
+          echo "evidence_id=${EVIDENCE_ID}" >> $GITHUB_OUTPUT
+          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+          echo "Evidence ID: ${EVIDENCE_ID}"
+
+      # ── Setup Python (for pack-evidence.py) ────────────────────────────────
+      - name: "Setup Python"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ──────────────────────────────────────────────────────────────────────
+      # s-10: Run test suite + collect coverage
+      # ──────────────────────────────────────────────────────────────────────
+      - name: "s-10 | Setup Node.js"
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: "s-10 | Install Node dependencies"
+        run: npm ci
+
+      - name: "s-10 | Run test suite with coverage"
+        id: tests
+        run: |
+          # Adjust test command to match your project's test runner
+          # vitest:  npx vitest run --reporter=json --outputFile=test-results.json
+          # jest:    npx jest --json --outputFile=test-results.json --coverage
+          # pytest:  python -m pytest --json-report --json-report-file=test-results.json
+          npm run test:ci -- --reporter=json --outputFile=test-results.json || true
+          echo "test_exit=$?" >> $GITHUB_OUTPUT
+        continue-on-error: false
+
+      - name: "s-10 | Ensure test-results.json exists"
+        run: |
+          if [ ! -f test-results.json ]; then
+            echo '{"numPassedTests":0,"numFailedTests":1,"testResults":[],"_note":"test-results.json not generated — adjust test command"}' > test-results.json
+          fi
+
+      # ──────────────────────────────────────────────────────────────────────
+      # s-20: Assemble and upload signed evidence pack
+      # ──────────────────────────────────────────────────────────────────────
+      - name: "s-20 | Assemble evidence pack"
+        id: pack
+        run: |
+          python scripts/pack-evidence.py \
+            --evidence-id "${{ steps.evidence.outputs.evidence_id }}" \
+            --run-id "${{ github.run_id }}" \
+            --pr "${{ github.event.number }}" \
+            --commit "${{ steps.evidence.outputs.short_sha }}" \
+            --branch "${{ github.head_ref }}" \
+            --repo "${{ github.repository }}" \
+            --runbook-id "rb-001" \
+            --app-id "app-eva-da-rebuild" \
+            --test-results test-results.json \
+            --output evidence-pack.json
+          echo "pack_exit=$?" >> $GITHUB_OUTPUT
+
+      - name: "s-20 | Upload evidence pack artifact"
+        uses: actions/upload-artifact@v4
+        with:
+          name: "evidence-pack-${{ steps.evidence.outputs.evidence_id }}"
+          path: |
+            evidence-pack.json
+            test-results.json
+          retention-days: 90
+          if-no-files-found: warn
+
+      # ──────────────────────────────────────────────────────────────────────
+      # s-30: Post evidence summary as GitHub check run (required status check)
+      # ──────────────────────────────────────────────────────────────────────
+      - name: "s-30 | Post evidence check run"
+        uses: actions/github-script@v7
+        if: always()
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+            let pack = {};
+            try {
+              pack = JSON.parse(fs.readFileSync('evidence-pack.json', 'utf8'));
+            } catch (e) {
+              pack = { evidence_id: '${{ steps.evidence.outputs.evidence_id }}', summary: { passed: 0, failed: 1, coverage: 0 } };
+            }
+
+            const failed = pack.summary?.failed ?? 1;
+            const passed = pack.summary?.passed ?? 0;
+            const coverage = pack.summary?.coverage ?? 0;
+            const conclusion = failed === 0 ? 'success' : 'failure';
+
+            await github.rest.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: 'evidence-pack',
+              head_sha: context.payload.pull_request.head.sha,
+              status: 'completed',
+              conclusion: conclusion,
+              output: {
+                title: `Evidence Pack — ${pack.evidence_id}`,
+                summary: [
+                  `**Tests:** ${passed} passed / ${failed} failed`,
+                  `**Coverage:** ${coverage}%`,
+                  `**Evidence ID:** \`${pack.evidence_id}\``,
+                  `**Runbook:** rb-001`,
+                  `**Artifact:** evidence-pack-${pack.evidence_id}`,
+                ].join('  \n'),
+              },
+            });
+
+            core.info(`Check posted — conclusion: ${conclusion}`);
+            if (failed > 0) {
+              core.setFailed(`${failed} test(s) failed — see evidence pack`);
+            }
+
+      # ── Summary ────────────────────────────────────────────────────────────
+      - name: "Job summary"
+        if: always()
+        run: |
+          echo "## RB-001 Evidence Pack" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Evidence ID | \`${{ steps.evidence.outputs.evidence_id }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| PR | #${{ github.event.number }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Commit | \`${{ steps.evidence.outputs.short_sha }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Runbook | rb-001 |" >> $GITHUB_STEP_SUMMARY
+          echo "| Artifact | evidence-pack-${{ steps.evidence.outputs.evidence_id }} |" >> $GITHUB_STEP_SUMMARY

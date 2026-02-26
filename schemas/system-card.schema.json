@@ -1,0 +1,435 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://eva.gc.ca/schemas/system-card.schema.json",
+  "title": "AI System Card Schema",
+  "description": "JSON Schema for validating AI System Card documents with YAML front matter",
+  "type": "object",
+  "required": ["frontmatter", "document_control", "system_overview", "ai_model", "architecture", "data_handling", "responsible_ai", "risk_assessment", "performance", "testing", "compliance", "operational"],
+  "properties": {
+    "frontmatter": {
+      "type": "object",
+      "required": ["id", "title", "owner", "version", "last_updated"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^TMPL-SC-[0-9]{3}$",
+          "description": "Unique template identifier (e.g., TMPL-SC-001)"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 5,
+          "description": "Title of the system card"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Team or role responsible for this document"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+$",
+          "description": "Version number (e.g., 1.0)"
+        },
+        "last_updated": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "description": "Last update date in YYYY-MM-DD format"
+        }
+      }
+    },
+    "document_control": {
+      "type": "object",
+      "required": ["system_id", "classification", "owner", "technical_lead", "last_review_date", "next_review_date", "status"],
+      "properties": {
+        "system_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique system identifier"
+        },
+        "classification": {
+          "type": "string",
+          "enum": ["Protected B", "Protected A", "Unclassified"],
+          "description": "Security classification"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Owning team or division"
+        },
+        "technical_lead": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Technical lead name and contact"
+        },
+        "last_review_date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "next_review_date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Development", "Production", "Decommissioned"]
+        }
+      }
+    },
+    "system_overview": {
+      "type": "object",
+      "required": ["purpose", "scope", "users"],
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "minLength": 20,
+          "description": "Business purpose (2-3 sentences)"
+        },
+        "scope": {
+          "type": "object",
+          "required": ["in_scope", "out_of_scope"],
+          "properties": {
+            "in_scope": {
+              "type": "array",
+              "minItems": 1
+            },
+            "out_of_scope": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        "users": {
+          "type": "array",
+          "minItems": 1,
+          "description": "User groups and use cases"
+        }
+      }
+    },
+    "ai_model": {
+      "type": "object",
+      "required": ["model_family", "model_version", "deployment_type", "hosting_region", "capabilities", "limitations"],
+      "properties": {
+        "model_family": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "deployment_type": {
+          "type": "string",
+          "enum": ["Cloud service", "On-premises", "Hybrid"]
+        },
+        "hosting_region": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Geographic location"
+        },
+        "capabilities": {
+          "type": "array",
+          "minItems": 1,
+          "description": "What the model can do"
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Known model limitations"
+        }
+      }
+    },
+    "architecture": {
+      "type": "object",
+      "required": ["components", "data_flow", "network"],
+      "properties": {
+        "components": {
+          "type": "array",
+          "minItems": 1,
+          "description": "System components with technology and classification"
+        },
+        "data_flow": {
+          "type": "string",
+          "minLength": 10,
+          "description": "How data flows through the system"
+        },
+        "network": {
+          "type": "object",
+          "required": ["network_isolation", "data_sovereignty"],
+          "properties": {
+            "network_isolation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data_sovereignty": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Geographic restrictions"
+            }
+          }
+        }
+      }
+    },
+    "data_handling": {
+      "type": "object",
+      "required": ["input_data", "output_data", "protection_measures"],
+      "properties": {
+        "input_data": {
+          "type": "object",
+          "required": ["data_types", "classification", "pii_present", "retention"],
+          "properties": {
+            "data_types": {
+              "type": "array",
+              "minItems": 1
+            },
+            "classification": {
+              "type": "string",
+              "minLength": 1
+            },
+            "pii_present": {
+              "type": "string",
+              "enum": ["Yes", "No"]
+            },
+            "retention": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "output_data": {
+          "type": "object",
+          "required": ["data_types", "classification", "logging", "storage_location"],
+          "properties": {
+            "data_types": {
+              "type": "array",
+              "minItems": 1
+            },
+            "classification": {
+              "type": "string",
+              "minLength": 1
+            },
+            "logging": {
+              "type": "string",
+              "minLength": 1
+            },
+            "storage_location": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "protection_measures": {
+          "type": "object",
+          "required": ["encryption_at_rest", "encryption_in_transit", "access_controls"],
+          "properties": {
+            "encryption_at_rest": {
+              "type": "string",
+              "minLength": 1
+            },
+            "encryption_in_transit": {
+              "type": "string",
+              "minLength": 1
+            },
+            "access_controls": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "responsible_ai": {
+      "type": "object",
+      "required": ["fairness", "transparency", "accountability", "privacy"],
+      "properties": {
+        "fairness": {
+          "type": "object",
+          "required": ["bias_assessment"],
+          "properties": {
+            "bias_assessment": {
+              "type": "string",
+              "minLength": 10
+            }
+          }
+        },
+        "transparency": {
+          "type": "object",
+          "required": ["user_disclosure"],
+          "properties": {
+            "user_disclosure": {
+              "type": "string",
+              "minLength": 10
+            }
+          }
+        },
+        "accountability": {
+          "type": "object",
+          "required": ["human_oversight", "incident_response"],
+          "properties": {
+            "human_oversight": {
+              "type": "string",
+              "minLength": 10
+            },
+            "incident_response": {
+              "type": "string",
+              "minLength": 10
+            }
+          }
+        },
+        "privacy": {
+          "type": "object",
+          "required": ["pia_status"],
+          "properties": {
+            "pia_status": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "risk_assessment": {
+      "type": "object",
+      "required": ["identified_risks", "residual_risks"],
+      "properties": {
+        "identified_risks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["risk_id", "category", "description", "severity", "mitigation", "owner"],
+            "properties": {
+              "risk_id": {
+                "type": "string",
+                "pattern": "^RSK-[0-9]{3}$"
+              },
+              "category": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string",
+                "minLength": 10
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["Critical", "High", "Medium", "Low"]
+              },
+              "mitigation": {
+                "type": "string",
+                "minLength": 10
+              },
+              "owner": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "residual_risks": {
+          "type": "array",
+          "minItems": 0
+        }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "required": ["metrics", "monitoring"],
+      "properties": {
+        "metrics": {
+          "type": "array",
+          "minItems": 1
+        },
+        "monitoring": {
+          "type": "object",
+          "required": ["monitoring_tools", "alert_thresholds"],
+          "properties": {
+            "monitoring_tools": {
+              "type": "string",
+              "minLength": 1
+            },
+            "alert_thresholds": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "testing": {
+      "type": "object",
+      "required": ["testing_approach", "validation_results"],
+      "properties": {
+        "testing_approach": {
+          "type": "array",
+          "minItems": 1
+        },
+        "validation_results": {
+          "type": "object",
+          "required": ["validation_date"],
+          "properties": {
+            "validation_date": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+            }
+          }
+        }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "required": ["regulatory_compliance", "approvals"],
+      "properties": {
+        "regulatory_compliance": {
+          "type": "array",
+          "minItems": 1
+        },
+        "approvals": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    },
+    "operational": {
+      "type": "object",
+      "required": ["support_model", "disaster_recovery"],
+      "properties": {
+        "support_model": {
+          "type": "object",
+          "required": ["support_team", "escalation_path", "sla"],
+          "properties": {
+            "support_team": {
+              "type": "string",
+              "minLength": 1
+            },
+            "escalation_path": {
+              "type": "string",
+              "minLength": 1
+            },
+            "sla": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "disaster_recovery": {
+          "type": "object",
+          "required": ["rto", "rpo", "backup_frequency"],
+          "properties": {
+            "rto": {
+              "type": "string",
+              "minLength": 1
+            },
+            "rpo": {
+              "type": "string",
+              "minLength": 1
+            },
+            "backup_frequency": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,449 @@
+{
+  "meta": {
+    "schema": "eva.discovery.v2",
+    "generated_at": "2026-02-25T06:37:43.085Z",
+    "repo": "C:\\AICOE\\eva-foundation\\40-eva-control-plane"
+  },
+  "project": null,
+  "planned": {
+    "epic": {
+      "title": "40-eva-control-plane",
+      "source": "README.md"
+    },
+    "features": [
+      {
+        "id": "F40-01",
+        "title": "ARTIFACT_ID API [ID=F40-ARTIFACT_ID]",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-02",
+        "title": "EVIDENCE_ID API [ID=F40-EVIDENCE_ID]",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-03",
+        "title": "RUN_ID API [ID=F40-RUN_ID]",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-04",
+        "title": "Runbooks implemented",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-05",
+        "title": "Runtime API (port 8020)",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-06",
+        "title": "Quick start",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-07",
+        "title": "Relationship with 37-data-model",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-08",
+        "title": "Evidence pack schema",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-09",
+        "title": "Guardrails enforced",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-HEALTH",
+        "title": "HEALTH API",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-ARTIFACT_ID",
+        "title": "ARTIFACT_ID API",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-EVIDENCE_ID",
+        "title": "EVIDENCE_ID API",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-RUN_ID",
+        "title": "RUN_ID API",
+        "source": "veritas-plan.json"
+      }
+    ],
+    "stories": [
+      {
+        "id": "F40-01-001",
+        "title": "GET /{artifact_id} [ID=F40-ARTIFACT_ID-001]",
+        "feature_id": "F40-01",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-02-001",
+        "title": "GET /{evidence_id} [ID=F40-EVIDENCE_ID-001]",
+        "feature_id": "F40-02",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-03-001",
+        "title": "GET /{run_id} [ID=F40-RUN_ID-001]",
+        "feature_id": "F40-03",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-03-002",
+        "title": "PATCH /{run_id} [ID=F40-RUN_ID-002]",
+        "feature_id": "F40-03",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-HEALTH-001",
+        "title": "GET /health",
+        "feature_id": "F40-HEALTH",
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-HEALTH-001",
+        "title": "GET /health",
+        "feature_id": "F40-HEALTH",
+        "done": false,
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-ARTIFACT_ID-001",
+        "title": "GET /{artifact_id}",
+        "feature_id": "F40-ARTIFACT_ID",
+        "done": false,
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-EVIDENCE_ID-001",
+        "title": "GET /{evidence_id}",
+        "feature_id": "F40-EVIDENCE_ID",
+        "done": false,
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-RUN_ID-001",
+        "title": "GET /{run_id}",
+        "feature_id": "F40-RUN_ID",
+        "done": false,
+        "source": "veritas-plan.json"
+      },
+      {
+        "id": "F40-RUN_ID-002",
+        "title": "PATCH /{run_id}",
+        "feature_id": "F40-RUN_ID",
+        "done": false,
+        "source": "veritas-plan.json"
+      }
+    ],
+    "tasks": [],
+    "acceptance": [],
+    "declared_status": {}
+  },
+  "actual": {
+    "artifacts": [
+      {
+        "path": "ado-artifacts.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "ado-import.ps1",
+        "type": "code",
+        "story_tags": []
+      },
+      {
+        "path": "PLAN.md",
+        "type": "doc",
+        "story_tags": []
+      },
+      {
+        "path": "README.md",
+        "type": "doc",
+        "story_tags": []
+      },
+      {
+        "path": "requirements.txt",
+        "type": "other",
+        "story_tags": []
+      },
+      {
+        "path": ".github/copilot-instructions.md",
+        "type": "doc",
+        "story_tags": []
+      },
+      {
+        "path": "api/server.py",
+        "type": "code",
+        "story_tags": [
+          "F40-01-001",
+          "F40-03-001",
+          "F40-03-002",
+          "F40-ARTIFACT_ID-001",
+          "F40-EVIDENCE_ID-001",
+          "F40-HEALTH-001",
+          "F40-RUN_ID-001",
+          "F40-RUN_ID-002"
+        ]
+      },
+      {
+        "path": "api/__init__.py",
+        "type": "code",
+        "story_tags": []
+      },
+      {
+        "path": "model/artifacts.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "model/runs.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "model/step_runs.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "schemas/data-card.schema.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "schemas/evaluation-report.schema.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "schemas/risk-control-register.schema.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "schemas/solution.schema.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "schemas/system-card.schema.json",
+        "type": "data",
+        "story_tags": []
+      },
+      {
+        "path": "scripts/pack-evidence.py",
+        "type": "code",
+        "story_tags": []
+      },
+      {
+        "path": ".github/copilot-skills/00-skill-index.skill.md",
+        "type": "doc",
+        "story_tags": []
+      },
+      {
+        "path": ".github/workflows/rb-001-pr-ci-evidence.yml",
+        "type": "config",
+        "story_tags": []
+      },
+      {
+        "path": ".github/workflows/rb-002-promote-dev.yml",
+        "type": "config",
+        "story_tags": []
+      },
+      {
+        "path": "api/routers/artifacts.py",
+        "type": "code",
+        "story_tags": []
+      },
+      {
+        "path": "api/routers/evidence.py",
+        "type": "code",
+        "story_tags": [
+          "F40-02-001"
+        ]
+      },
+      {
+        "path": "api/routers/runs.py",
+        "type": "code",
+        "story_tags": []
+      },
+      {
+        "path": "api/routers/__init__.py",
+        "type": "code",
+        "story_tags": []
+      },
+      {
+        "path": "docs/ADO/20260222-ai-gov-dependencies.md",
+        "type": "doc",
+        "story_tags": []
+      }
+    ],
+    "story_artifact_map": {
+      "F40-01-001": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-03-001": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-03-002": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-ARTIFACT_ID-001": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-EVIDENCE_ID-001": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-HEALTH-001": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-RUN_ID-001": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-RUN_ID-002": {
+        "artifacts": [
+          {
+            "path": "api/server.py",
+            "type": "code",
+            "story_tags": [
+              "F40-01-001",
+              "F40-03-001",
+              "F40-03-002",
+              "F40-ARTIFACT_ID-001",
+              "F40-EVIDENCE_ID-001",
+              "F40-HEALTH-001",
+              "F40-RUN_ID-001",
+              "F40-RUN_ID-002"
+            ]
+          }
+        ]
+      },
+      "F40-02-001": {
+        "artifacts": [
+          {
+            "path": "api/routers/evidence.py",
+            "type": "code",
+            "story_tags": [
+              "F40-02-001"
+            ]
+          }
+        ]
+      }
+    },
+    "commit_evidence_map": {}
+  }
+}

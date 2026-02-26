@@ -1,0 +1,70 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# RB-002 — Promote to DEV (stub)
+# Source runbook: 37-data-model/model/runbooks.json  →  rb-002
+#
+# Triggered on: PR merged → main
+# Steps:
+#   s-10  Deploy container image to DEV  (requires AZURE_CLIENT_ID, AZURE_TENANT_ID, etc.)
+#   s-20  Run smoke test (telemetry query, 5 min window)
+#   s-30  Capture telemetry baseline snapshot (30 min)
+#   s-40  Append deployment record to evidence pack
+#
+# Status: STUB — Azure credentials and container registry not yet configured.
+# To activate: set required secrets in GitHub repository settings.
+# ─────────────────────────────────────────────────────────────────────────────
+
+name: "RB-002 — Promote to DEV (stub)"
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  id-token: write   # required for OIDC federation with Azure
+
+jobs:
+  promote-dev:
+    name: "RB-002 | Promote to DEV"
+    runs-on: ubuntu-latest
+    environment: dev
+    timeout-minutes: 20
+
+    steps:
+      - name: "Checkout source"
+        uses: actions/checkout@v4
+
+      - name: "Compute evidence_id"
+        id: evidence
+        run: |
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          # Reuses run_id since there's no PR number on push
+          EVIDENCE_ID="GH${{ github.run_number }}-PUSH-${SHORT_SHA}"
+          echo "evidence_id=${EVIDENCE_ID}" >> $GITHUB_OUTPUT
+          echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
+
+      # ── s-10: Deploy to DEV ────────────────────────────────────────────────
+      # TODO: Configure OIDC federation and container registry details
+      - name: "s-10 | Login to Azure (OIDC)"
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: "s-10 | Deploy to DEV (stub — replace with real az CLI deploy)"
+        run: |
+          echo "TODO: az containerapp update --name eva-dev --resource-group rg-eva-dev --image <registry>/eva:${{ steps.evidence.outputs.short_sha }}"
+          echo "deploy_id=deploy-stub-${{ github.run_id }}" >> $GITHUB_OUTPUT
+        id: deploy
+
+      # ── Job summary ────────────────────────────────────────────────────────
+      - name: "Job summary"
+        if: always()
+        run: |
+          echo "## RB-002 Promote DEV (stub)" >> $GITHUB_STEP_SUMMARY
+          echo "| Field | Value |" >> $GITHUB_STEP_SUMMARY
+          echo "|---|---|" >> $GITHUB_STEP_SUMMARY
+          echo "| Evidence ID | \`${{ steps.evidence.outputs.evidence_id }}\` |" >> $GITHUB_STEP_SUMMARY
+          echo "| Status | stub — not fully wired |" >> $GITHUB_STEP_SUMMARY

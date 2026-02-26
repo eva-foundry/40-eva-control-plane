@@ -1,0 +1,228 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://eva.gc.ca/schemas/solution.schema.json",
+  "title": "EVA Governance Solution Descriptor",
+  "description": "Schema for governance/solution.yml that marks solution roots and defines governance parameters",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "solution_id",
+    "title",
+    "owner_org",
+    "product_owner",
+    "technical_owner",
+    "environment_intent",
+    "agent_level",
+    "solution_type",
+    "data_classification",
+    "pii_present",
+    "model_training_on_user_data",
+    "external_api_exposure",
+    "integrates_internal_systems",
+    "hosting",
+    "logging",
+    "evidence",
+    "links"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+$",
+      "description": "Schema version (e.g., 1.0)"
+    },
+    "solution_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "description": "Unique kebab-case solution identifier"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Human-readable solution name"
+    },
+    "owner_org": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Owning organization or team"
+    },
+    "product_owner": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Product owner name or role"
+    },
+    "technical_owner": {
+      "type": "string",
+      "minLength": 2,
+      "description": "Technical owner name or role"
+    },
+    "environment_intent": {
+      "type": "string",
+      "enum": ["dev", "test", "prod"],
+      "description": "Target deployment environment"
+    },
+    "agent_level": {
+      "type": "string",
+      "enum": ["L0", "L1", "L2", "L3"],
+      "description": "AI agent autonomy level"
+    },
+    "solution_type": {
+      "type": "string",
+      "enum": ["rag", "chat", "agent", "workflow", "pipeline", "ui", "service", "library", "other"],
+      "description": "Solution architecture pattern"
+    },
+    "data_classification": {
+      "type": "string",
+      "enum": ["Unclassified", "Protected A", "Protected B", "Protected C", "Secret", "Top Secret"],
+      "description": "Maximum data classification handled"
+    },
+    "pii_present": {
+      "type": "string",
+      "enum": ["yes", "no", "unknown"],
+      "description": "Whether solution handles PII"
+    },
+    "model_training_on_user_data": {
+      "type": "string",
+      "enum": ["yes", "no"],
+      "description": "Whether user data is used for model training"
+    },
+    "external_api_exposure": {
+      "type": "string",
+      "enum": ["yes", "no"],
+      "description": "Whether solution exposes external APIs"
+    },
+    "integrates_internal_systems": {
+      "type": "string",
+      "enum": ["yes", "no"],
+      "description": "Whether solution integrates with internal systems"
+    },
+    "hosting": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cloud", "region", "network"],
+      "properties": {
+        "cloud": {
+          "type": "string",
+          "minLength": 2,
+          "description": "Cloud provider (e.g., Azure, AWS, GCP)"
+        },
+        "region": {
+          "type": "string",
+          "minLength": 2,
+          "description": "Geographic region (e.g., Canada Central)"
+        },
+        "network": {
+          "type": "string",
+          "minLength": 2,
+          "description": "Network configuration (e.g., VNet + Private Endpoints)"
+        }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["enabled", "contains_user_prompts", "retention_days"],
+      "properties": {
+        "enabled": {
+          "type": "string",
+          "enum": ["yes", "no"],
+          "description": "Whether logging is enabled"
+        },
+        "contains_user_prompts": {
+          "type": "string",
+          "enum": ["yes", "no"],
+          "description": "Whether logs contain user prompts"
+        },
+        "retention_days": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3650,
+          "description": "Log retention period in days"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["evidence_path", "required_set", "last_reviewed"],
+      "properties": {
+        "evidence_path": {
+          "type": "string",
+          "const": "governance/evidence",
+          "description": "Fixed path to evidence folder"
+        },
+        "required_set": {
+          "type": "string",
+          "enum": ["default", "l2", "custom"],
+          "description": "Evidence template set to use"
+        },
+        "last_reviewed": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "Date of last governance review (YYYY-MM-DD)"
+        }
+      }
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["repo_path"],
+      "properties": {
+        "repo_path": {
+          "type": "string",
+          "minLength": 2,
+          "description": "Path from repository root"
+        },
+        "ado_board": {
+          "type": "string",
+          "description": "Azure DevOps board link"
+        },
+        "runbook": {
+          "type": "string",
+          "description": "Operational runbook link"
+        }
+      }
+    },
+    "description": {
+      "type": "string",
+      "description": "Optional solution description"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Optional additional metadata"
+    },
+    "compliance": {
+      "type": "object",
+      "description": "Optional compliance information"
+    },
+    "lifecycle": {
+      "type": "object",
+      "description": "Optional lifecycle information"
+    },
+    "risk": {
+      "type": "object",
+      "description": "Optional risk profile"
+    },
+    "integrations": {
+      "type": "array",
+      "description": "Optional integration points"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional additional notes"
+    },
+    "version": {
+      "type": "string",
+      "description": "Document version"
+    },
+    "last_updated": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "Last update date"
+    },
+    "created_by": {
+      "type": "string",
+      "description": "Creator/owner"
+    }
+  }
+}

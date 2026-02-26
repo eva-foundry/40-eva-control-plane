@@ -1,0 +1,32 @@
+{
+  "artifacts": [
+    {
+      "id": "artifact-sample-001-tests",
+      "evidence_id": "GH0001-PR01-abc1234",
+      "run_id": "run-sample-001",
+      "step_id": "s-10",
+      "name": "test-results.json",
+      "type": "artifact",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb924...",
+      "uri": "https://artifacts.example/GH0001-PR01-abc1234/test-results.json",
+      "size_bytes": 12480,
+      "retention_days": 90,
+      "uploaded_at": "2026-02-21T15:03:02Z",
+      "notes": "Sample artifact."
+    },
+    {
+      "id": "artifact-sample-001-pack",
+      "evidence_id": "GH0001-PR01-abc1234",
+      "run_id": "run-sample-001",
+      "step_id": "s-20",
+      "name": "evidence-pack.json",
+      "type": "evidence_pack",
+      "sha256": "abc123def456...",
+      "uri": "https://artifacts.example/GH0001-PR01-abc1234/evidence-pack.json",
+      "size_bytes": 4096,
+      "retention_days": 90,
+      "uploaded_at": "2026-02-21T15:04:28Z",
+      "notes": "Sample evidence pack artifact."
+    }
+  ]
+}

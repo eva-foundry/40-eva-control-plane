@@ -1,0 +1,171 @@
+{
+  "schema": "eva.veritas-plan.v1",
+  "generated_at": "2026-02-25T06:37:42.578Z",
+  "generated_from": [
+    "PLAN.md"
+  ],
+  "format_detected": "veritas",
+  "prefix": "F40",
+  "features": [
+    {
+      "id": "F40-01",
+      "title": "ARTIFACT_ID API [ID=F40-ARTIFACT_ID]",
+      "source_heading": "## Feature: ARTIFACT_ID API [ID=F40-ARTIFACT_ID]",
+      "stories": [
+        {
+          "id": "F40-01-001",
+          "title": "GET /{artifact_id} [ID=F40-ARTIFACT_ID-001]",
+          "feature_id": "F40-01",
+          "source": "heading",
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "id": "F40-02",
+      "title": "EVIDENCE_ID API [ID=F40-EVIDENCE_ID]",
+      "source_heading": "## Feature: EVIDENCE_ID API [ID=F40-EVIDENCE_ID]",
+      "stories": [
+        {
+          "id": "F40-02-001",
+          "title": "GET /{evidence_id} [ID=F40-EVIDENCE_ID-001]",
+          "feature_id": "F40-02",
+          "source": "heading",
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "id": "F40-03",
+      "title": "RUN_ID API [ID=F40-RUN_ID]",
+      "source_heading": "## Feature: RUN_ID API [ID=F40-RUN_ID]",
+      "stories": [
+        {
+          "id": "F40-03-001",
+          "title": "GET /{run_id} [ID=F40-RUN_ID-001]",
+          "feature_id": "F40-03",
+          "source": "heading",
+          "tasks": []
+        },
+        {
+          "id": "F40-03-002",
+          "title": "PATCH /{run_id} [ID=F40-RUN_ID-002]",
+          "feature_id": "F40-03",
+          "source": "heading",
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "id": "F40-04",
+      "title": "Runbooks implemented",
+      "source_heading": "## Feature: Runbooks implemented [ID=F40-04]",
+      "stories": []
+    },
+    {
+      "id": "F40-05",
+      "title": "Runtime API (port 8020)",
+      "source_heading": "## Feature: Runtime API (port 8020) [ID=F40-05]",
+      "stories": []
+    },
+    {
+      "id": "F40-06",
+      "title": "Quick start",
+      "source_heading": "## Feature: Quick start [ID=F40-06]",
+      "stories": []
+    },
+    {
+      "id": "F40-07",
+      "title": "Relationship with 37-data-model",
+      "source_heading": "## Feature: Relationship with 37-data-model [ID=F40-07]",
+      "stories": []
+    },
+    {
+      "id": "F40-08",
+      "title": "Evidence pack schema",
+      "source_heading": "## Feature: Evidence pack schema [ID=F40-08]",
+      "stories": []
+    },
+    {
+      "id": "F40-09",
+      "title": "Guardrails enforced",
+      "source_heading": "## Feature: Guardrails enforced [ID=F40-09]",
+      "stories": []
+    },
+    {
+      "id": "F40-HEALTH",
+      "title": "HEALTH API",
+      "source_heading": "## Feature: HEALTH API [ID=F40-HEALTH]",
+      "stories": [
+        {
+          "id": "F40-HEALTH-001",
+          "title": "GET /health",
+          "feature_id": "F40-HEALTH",
+          "source": "heading",
+          "tasks": []
+        },
+        {
+          "id": "F40-HEALTH-001",
+          "title": "GET /health",
+          "feature_id": "F40-HEALTH",
+          "done": false,
+          "source": "code-structure",
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "id": "F40-ARTIFACT_ID",
+      "title": "ARTIFACT_ID API",
+      "source": "code-structure",
+      "stories": [
+        {
+          "id": "F40-ARTIFACT_ID-001",
+          "title": "GET /{artifact_id}",
+          "feature_id": "F40-ARTIFACT_ID",
+          "done": false,
+          "source": "code-structure",
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "id": "F40-EVIDENCE_ID",
+      "title": "EVIDENCE_ID API",
+      "source": "code-structure",
+      "stories": [
+        {
+          "id": "F40-EVIDENCE_ID-001",
+          "title": "GET /{evidence_id}",
+          "feature_id": "F40-EVIDENCE_ID",
+          "done": false,
+          "source": "code-structure",
+          "tasks": []
+        }
+      ]
+    },
+    {
+      "id": "F40-RUN_ID",
+      "title": "RUN_ID API",
+      "source": "code-structure",
+      "stories": [
+        {
+          "id": "F40-RUN_ID-001",
+          "title": "GET /{run_id}",
+          "feature_id": "F40-RUN_ID",
+          "done": false,
+          "source": "code-structure",
+          "tasks": []
+        },
+        {
+          "id": "F40-RUN_ID-002",
+          "title": "PATCH /{run_id}",
+          "feature_id": "F40-RUN_ID",
+          "done": false,
+          "source": "code-structure",
+          "tasks": []
+        }
+      ]
+    }
+  ]
+}

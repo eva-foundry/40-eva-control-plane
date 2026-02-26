@@ -1,0 +1,493 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://eva.gc.ca/schemas/evaluation-report.schema.json",
+  "title": "AI Evaluation Report Schema",
+  "description": "JSON Schema for validating AI Evaluation Report documents with YAML front matter",
+  "type": "object",
+  "required": ["frontmatter", "document_control", "executive_summary", "system_under_test", "methodology", "test_results", "defects", "coverage", "recommendations"],
+  "properties": {
+    "frontmatter": {
+      "type": "object",
+      "required": ["id", "title", "owner", "version", "last_updated"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^TMPL-ER-[0-9]{3}$",
+          "description": "Unique template identifier (e.g., TMPL-ER-001)"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 5
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+$"
+        },
+        "last_updated": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        }
+      }
+    },
+    "document_control": {
+      "type": "object",
+      "required": ["evaluation_id", "classification", "system_under_test", "evaluation_lead", "evaluation_period", "report_date", "status"],
+      "properties": {
+        "evaluation_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "type": "string",
+          "enum": ["Protected B", "Protected A", "Unclassified"]
+        },
+        "system_under_test": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluation_lead": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluation_period": {
+          "type": "string",
+          "minLength": 1
+        },
+        "report_date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Final", "Draft", "In Progress"]
+        }
+      }
+    },
+    "executive_summary": {
+      "type": "object",
+      "required": ["purpose", "scope", "key_findings", "overall_assessment"],
+      "properties": {
+        "purpose": {
+          "type": "string",
+          "minLength": 10
+        },
+        "scope": {
+          "type": "object",
+          "required": ["in_scope", "out_of_scope"],
+          "properties": {
+            "in_scope": {
+              "type": "array",
+              "minItems": 1
+            },
+            "out_of_scope": {
+              "type": "array",
+              "minItems": 1
+            }
+          }
+        },
+        "key_findings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["finding", "result", "severity"],
+            "properties": {
+              "finding": {
+                "type": "string",
+                "minLength": 5
+              },
+              "result": {
+                "type": "string",
+                "enum": ["Pass", "Fail", "Partial"]
+              },
+              "severity": {
+                "type": "string",
+                "enum": ["Critical", "High", "Medium", "Low"]
+              }
+            }
+          }
+        },
+        "overall_assessment": {
+          "type": "object",
+          "required": ["status", "recommendation"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["Ready for production", "Requires remediation", "Not ready"]
+            },
+            "recommendation": {
+              "type": "string",
+              "minLength": 10
+            }
+          }
+        }
+      }
+    },
+    "system_under_test": {
+      "type": "object",
+      "required": ["system_name", "system_version", "model_name", "model_version", "environment", "configuration"],
+      "properties": {
+        "system_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "system_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "environment": {
+          "type": "string",
+          "enum": ["Development", "Staging", "Pre-Production", "Production"]
+        },
+        "configuration": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "methodology": {
+      "type": "object",
+      "required": ["framework", "evaluation_dimensions", "team", "test_environment"],
+      "properties": {
+        "framework": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evaluation_dimensions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "enum": [
+              "Functional Correctness",
+              "Performance and Reliability",
+              "Security",
+              "Privacy",
+              "Fairness and Bias",
+              "Transparency and Explainability",
+              "Robustness",
+              "Safety",
+              "Usability"
+            ]
+          }
+        },
+        "team": {
+          "type": "array",
+          "minItems": 1
+        },
+        "test_environment": {
+          "type": "object",
+          "required": ["infrastructure", "data", "load"],
+          "properties": {
+            "infrastructure": {
+              "type": "string",
+              "minLength": 1
+            },
+            "data": {
+              "type": "string",
+              "minLength": 1
+            },
+            "load": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "test_results": {
+      "type": "object",
+      "required": ["functional_correctness", "performance", "security", "privacy", "fairness", "transparency", "robustness", "safety"],
+      "properties": {
+        "functional_correctness": {
+          "type": "object",
+          "required": ["accuracy", "hallucination_rate"],
+          "properties": {
+            "accuracy": {
+              "type": "object",
+              "required": ["overall", "status"],
+              "properties": {
+                "overall": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            },
+            "hallucination_rate": {
+              "type": "object",
+              "required": ["rate", "status"],
+              "properties": {
+                "rate": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            }
+          }
+        },
+        "performance": {
+          "type": "object",
+          "required": ["response_time", "throughput"],
+          "properties": {
+            "response_time": {
+              "type": "object",
+              "required": ["median", "p95", "status"],
+              "properties": {
+                "median": {
+                  "type": "number"
+                },
+                "p95": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            },
+            "throughput": {
+              "type": "object",
+              "required": ["requests_per_second", "status"],
+              "properties": {
+                "requests_per_second": {
+                  "type": "number"
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            }
+          }
+        },
+        "security": {
+          "type": "object",
+          "required": ["input_validation", "authentication", "data_protection"],
+          "properties": {
+            "input_validation": {
+              "type": "object",
+              "required": ["findings", "status"],
+              "properties": {
+                "findings": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            },
+            "authentication": {
+              "type": "object",
+              "required": ["status"],
+              "properties": {
+                "status": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            },
+            "data_protection": {
+              "type": "object",
+              "required": ["encryption_at_rest", "encryption_in_transit"],
+              "properties": {
+                "encryption_at_rest": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                },
+                "encryption_in_transit": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            }
+          }
+        },
+        "privacy": {
+          "type": "object",
+          "required": ["pii_handling"],
+          "properties": {
+            "pii_handling": {
+              "type": "object",
+              "required": ["pii_minimization", "retention_compliance"],
+              "properties": {
+                "pii_minimization": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                },
+                "retention_compliance": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            }
+          }
+        },
+        "fairness": {
+          "type": "object",
+          "required": ["demographic_fairness"],
+          "properties": {
+            "demographic_fairness": {
+              "type": "object",
+              "required": ["subgroups_analyzed", "fairness_threshold", "status"],
+              "properties": {
+                "subgroups_analyzed": {
+                  "type": "array",
+                  "minItems": 1
+                },
+                "fairness_threshold": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "status": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail", "Partial"]
+                }
+              }
+            }
+          }
+        },
+        "transparency": {
+          "type": "object",
+          "required": ["output_transparency"],
+          "properties": {
+            "output_transparency": {
+              "type": "object",
+              "required": ["citations", "confidence_scores"],
+              "properties": {
+                "citations": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                },
+                "confidence_scores": {
+                  "type": "string",
+                  "enum": ["Pass", "Fail"]
+                }
+              }
+            }
+          }
+        },
+        "robustness": {
+          "type": "object",
+          "required": ["adversarial_robustness"],
+          "properties": {
+            "adversarial_robustness": {
+              "type": "object",
+              "required": ["test_cases", "successful_attacks"],
+              "properties": {
+                "test_cases": {
+                  "type": "number",
+                  "minimum": 0
+                },
+                "successful_attacks": {
+                  "type": "number",
+                  "minimum": 0
+                }
+              }
+            }
+          }
+        },
+        "safety": {
+          "type": "object",
+          "required": ["harmful_content"],
+          "properties": {
+            "harmful_content": {
+              "type": "object",
+              "required": ["filter_effectiveness"],
+              "properties": {
+                "filter_effectiveness": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "defects": {
+      "type": "object",
+      "required": ["critical", "high", "medium"],
+      "properties": {
+        "critical": {
+          "type": "array",
+          "minItems": 0
+        },
+        "high": {
+          "type": "array",
+          "minItems": 0
+        },
+        "medium": {
+          "type": "array",
+          "minItems": 0
+        }
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["by_dimension", "gaps"],
+      "properties": {
+        "by_dimension": {
+          "type": "array",
+          "minItems": 1
+        },
+        "gaps": {
+          "type": "array",
+          "minItems": 0
+        }
+      }
+    },
+    "recommendations": {
+      "type": "object",
+      "required": ["production_readiness", "improvement_recommendations", "reevaluation_triggers"],
+      "properties": {
+        "production_readiness": {
+          "type": "object",
+          "required": ["decision", "justification"],
+          "properties": {
+            "decision": {
+              "type": "string",
+              "enum": ["Approved for Production", "Conditional Approval", "Not Ready"]
+            },
+            "justification": {
+              "type": "string",
+              "minLength": 20
+            }
+          }
+        },
+        "improvement_recommendations": {
+          "type": "array",
+          "minItems": 0
+        },
+        "reevaluation_triggers": {
+          "type": "array",
+          "minItems": 1
+        }
+      }
+    }
+  }
+}

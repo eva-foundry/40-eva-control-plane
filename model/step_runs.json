@@ -1,0 +1,36 @@
+{
+  "step_runs": [
+    {
+      "id": "steprun-sample-001-s10",
+      "run_id": "run-sample-001",
+      "evidence_id": "GH0001-PR01-abc1234",
+      "step_id": "s-10",
+      "step_title": "Run test suite + collect coverage",
+      "agent_id": "agent-gh-ci",
+      "skill_id": "skill-run-tests",
+      "status": "succeeded",
+      "started_at": "2026-02-21T15:00:10Z",
+      "completed_at": "2026-02-21T15:03:00Z",
+      "duration_seconds": 170,
+      "output": { "passed": 142, "failed": 0, "coverage": 87.3 },
+      "evidence_artifact": "test-results.json",
+      "notes": "Sample step run."
+    },
+    {
+      "id": "steprun-sample-001-s20",
+      "run_id": "run-sample-001",
+      "evidence_id": "GH0001-PR01-abc1234",
+      "step_id": "s-20",
+      "step_title": "Assemble and upload signed evidence pack",
+      "agent_id": "agent-gh-ci",
+      "skill_id": "skill-pack-evidence",
+      "status": "succeeded",
+      "started_at": "2026-02-21T15:03:05Z",
+      "completed_at": "2026-02-21T15:04:25Z",
+      "duration_seconds": 80,
+      "output": { "evidencePackUri": "https://artifacts.example/GH0001-PR01-abc1234/evidence-pack.json", "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855" },
+      "evidence_artifact": "evidence-pack.json",
+      "notes": "Sample step run."
+    }
+  ]
+}
